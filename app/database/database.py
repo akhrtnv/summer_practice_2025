@@ -12,4 +12,12 @@ session = sessionmaker(bind=engine, autocommit=False, autoflush=False)
 # базовый класс для всех моделей
 Base = declarative_base()
 
+# получение автоматически закрывающейся сессии
+def get_db():
+    db = session()
+    try:
+        yield db
+    finally:
+        db.close()
+
 # TODO: поэксперементируй с каскадом

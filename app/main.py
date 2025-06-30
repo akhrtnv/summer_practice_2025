@@ -1,13 +1,15 @@
 from fastapi import FastAPI
 from contextlib import asynccontextmanager
-from app import file_handler, init_db, endpoints
+from .database.init_db import init_db
+from .file_handler import handler
+from .endpoints import router
 import asyncio
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # выполняется при старте
-    init_db.init_db()
-    asyncio.create_task(file_handler.handler())
+    init_db()
+    asyncio.create_task(handler())
     yield
     # выполняется при завершении
 
@@ -18,4 +20,4 @@ app = FastAPI(
     version="1.0.0"
 )
 
-app.include_router(endpoints.router)
+app.include_router(router)

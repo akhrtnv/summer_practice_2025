@@ -1,6 +1,6 @@
 from sqlalchemy import Column, Integer, String, DateTime, Float, ForeignKey
 from sqlalchemy.orm import relationship
-from app.database import Base
+from .database import Base
 
 class File(Base):
     __tablename__ = "files"
@@ -19,7 +19,6 @@ class Value(Base):
 
     id = Column(Integer, primary_key=True)
     file_id = Column(Integer, ForeignKey("files.id"))
-    
     start_time = Column(DateTime)  # TODO: что делать при одинаком времени?
     duration = Column(Integer)
     value = Column(Float)
@@ -32,16 +31,15 @@ class Result(Base):
 
     id = Column(Integer, primary_key=True)
     file_id = Column(Integer, ForeignKey("files.id"), unique=True)
-
     first_start = Column(DateTime)
     last_start = Column(DateTime)
-    max_duration = Column(Integer)
     min_duration = Column(Integer)
+    max_duration = Column(Integer)
     avg_duration = Column(Integer)
-    avg_metric = Column(Float)
-    median_metric = Column(Float)
-    max_metric = Column(Float)
-    min_metric = Column(Float)
+    avg_value = Column(Float)
+    median_value = Column(Float)
+    min_value = Column(Float)
+    max_value = Column(Float)
     experiment_count = Column(Integer)
 
     # отношение с моделью File
