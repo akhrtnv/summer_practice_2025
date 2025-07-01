@@ -19,7 +19,7 @@ class Value(Base):
 
     id = Column(Integer, primary_key=True)
     file_id = Column(Integer, ForeignKey("files.id"))
-    start_time = Column(DateTime)  # TODO: что делать при одинаком времени?
+    start_time = Column(DateTime)
     duration = Column(Integer)
     value = Column(Float)
 

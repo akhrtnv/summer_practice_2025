@@ -32,7 +32,7 @@ async def handler():
 
                 if not correct_row(start_time, duration, value):
                     incorrect_rows.append(i)
-        
+
         # отбрасываем некорректный файл
         if not correct_file(row_count, len(incorrect_rows)):
             continue
@@ -76,15 +76,13 @@ async def handler():
                     db.add(record)
             db.flush()
 
-            # TODO: проверь корректность типов полей в бд
-
             # запрос с получением общих метрик экспериментов файла
             query = db.query(
                 func.min(Value.start_time),
                 func.max(Value.start_time),
                 func.min(Value.duration),
                 func.max(Value.duration),
-                func.avg(Value.duration),
+                func.round(func.avg(Value.duration)),
                 func.avg(Value.value),
                 func.min(Value.value),
                 func.max(Value.value),

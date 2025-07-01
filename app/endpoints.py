@@ -48,7 +48,7 @@ def get_results(
         file = ( 
             db.query(File)
             .filter(File.filename == filename)
-            .options(joinedload(File.result))
+            .options(joinedload(File.result))  # подгружаем связанные данные из таблицы результатов
             .first()
         )
         if not file:
