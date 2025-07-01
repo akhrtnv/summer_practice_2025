@@ -2,7 +2,6 @@ from .database.database import session
 from .database.models import File, Value, Result
 from datetime import datetime
 from sqlalchemy import func
-from statistics import median
 from os import remove
 import asyncio
 import csv
@@ -35,7 +34,7 @@ async def handler():
                     incorrect_rows.append(i)
         
         # отбрасываем некорректный файл
-        if not (MIN_ROW_COUNT <= row_count <= MAX_ROW_COUNT) or len(incorrect_rows) == row_count:
+        if not correct_file(row_count, len(incorrect_rows)):
             continue
 
         db = session()
@@ -105,10 +104,12 @@ async def handler():
             ) = query.one()
 
             # получение медианы
-            values = db.query(Value.value) \
-                .filter(Value.file_id == file_id) \
-                .order_by(Value.value).all()
-            median_value = median([v[0] for v in values])
+            values = (
+                db.query(Value.value)
+                .filter(Value.file_id == file_id)
+                .all()
+            )
+            median_value = calc_median([v[0] for v in values])
 
             record = Result(
                 file_id = file_id,
@@ -137,7 +138,7 @@ def correct_start_time(start_time: datetime):
     return MIN_DATE <= start_time < datetime.now()
 
 def correct_duration(duration: int):
-    return duration > 0
+    return 0 < duration
 
 def correct_value(value: float):
     return MIN_VALUE <= value
@@ -152,10 +153,37 @@ def correct_row(start_time: datetime, duration: int, value: float):
     return True
 
 def parse_row(row: list):
-    start_time_str, duration_str, value_str = row
-                
-    start_time = datetime.strptime(start_time_str, "%Y-%m-%d_%H-%M-%S")
-    duration = int(duration_str)
-    value = float(value_str)
+    if len(row) != 3:
+        return None
 
-    return start_time, duration, value
+    start_time_str, duration_str, value_str = row
+    
+    try:
+        start_time = datetime.strptime(start_time_str, "%Y-%m-%d_%H-%M-%S")
+        duration = int(duration_str)
+        value = float(value_str)
+        return start_time, duration, value
+    except (ValueError, TypeError):
+        return None
+    
+def correct_file(row_count: int, incorrect_count: int):
+    if not (MIN_ROW_COUNT <= row_count <= MAX_ROW_COUNT):
+        return False
+    if not (incorrect_count < row_count):
+        return False
+    return True
+
+def calc_median(values: list[float]):
+    n = len(values)
+    
+    if n == 0:
+        return None
+    
+    sorted_values = sorted(values)
+
+    middle = n // 2
+
+    if n % 2 == 1:
+        return sorted_values[middle]
+    else:
+        return (sorted_values[middle - 1] + sorted_values[middle]) / 2  
