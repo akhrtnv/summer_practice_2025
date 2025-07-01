@@ -37,11 +37,11 @@ async def post_file(
 
 @router.get("/science/results/", response_model=List[ResultResponse])
 def get_results(
-    filename:         Optional[str] = Query(None, alias="fileName"),
-    min_avg_value:    Optional[float] = Query(None, alias="minAvgValue"),
-    max_avg_value:    Optional[float] = Query(None, alias="maxAvgValue"),
-    min_avg_duration: Optional[int] = Query(None, alias="minAvgDuration"),
-    max_avg_duration: Optional[int] = Query(None, alias="maxAvgDuration"),
+    filename         : Optional[str] = Query(None, alias="fileName"),
+    min_avg_value    : Optional[float] = Query(None, alias="minAvgValue"),
+    max_avg_value    : Optional[float] = Query(None, alias="maxAvgValue"),
+    min_avg_duration : Optional[int] = Query(None, alias="minAvgDuration"),
+    max_avg_duration : Optional[int] = Query(None, alias="maxAvgDuration"),
     db: Session = Depends(get_db)  # сессия с БД
 ):
     if filename:

@@ -9,7 +9,7 @@ import asyncio
 async def lifespan(app: FastAPI):
     # выполняется при старте
     init_db()
-    task = asyncio.create_task(handler())
+    asyncio.create_task(handler())
     yield
         
 

@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 from datetime import datetime
 from typing import List
 
@@ -7,8 +7,7 @@ class File(BaseModel):
     author     : str
     created_at : datetime
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes = True)
 
 class Result(BaseModel):
     first_start      : datetime
@@ -22,9 +21,8 @@ class Result(BaseModel):
     max_value        : float
     experiment_count : int
 
-    class Config:
-        from_attributes = True
-
+    model_config = ConfigDict(from_attributes = True)
+    
 class ResultResponse(BaseModel):
     file   : File
     result : Result
