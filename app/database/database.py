@@ -7,15 +7,7 @@ DATABASE_URL = "sqlite:///experiment_data.db"
 engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False})
 
 # создаем фабрику сессий, запрещаем автоматические коммиты и сбросы
-session = sessionmaker(bind=engine, autocommit=False, autoflush=False)
+session_factory = sessionmaker(bind=engine, autocommit=False, autoflush=False)
 
 # базовый класс для всех моделей
 Base = declarative_base()
-
-# получение автоматически закрывающейся сессии
-def get_db():
-    db = session()
-    try:
-        yield db
-    finally:
-        db.close()

@@ -4,7 +4,7 @@ from app.endpoints import get_values
 from fastapi import HTTPException
 from datetime import datetime
 
-def test_get_values_not_found():
+def test_get_values_file_not_found():
     mock_db = MagicMock()
     query = MagicMock()
     (query
