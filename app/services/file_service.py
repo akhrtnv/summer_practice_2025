@@ -20,6 +20,7 @@ class FileService:
 
         await self.file_queue.put((file.filename, filepath, author))  # добавляем в очередь обработки
         await file.close()
+        return {"message": "Файл принят для обработки"}
     
     def get_service(file_queue: asyncio.Queue = Depends(get_queue)):
         return FileService(file_queue)

@@ -16,8 +16,7 @@ async def post_file(
     author       : str = Form(...),
     file_service : FileService = Depends(FileService.get_service)
 ):
-    await file_service.add_file(file, author)
-    return {"message": "Файл принят для обработки"}
+    return await file_service.add_file(file, author)
     
     
 @router.get("/science/results/", response_model=List[ResultResponse])

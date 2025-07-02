@@ -1,6 +1,6 @@
 from unittest.mock import MagicMock
 from app.database.models import File, Value
-from app.endpoints import get_values
+from app.services.value_service import ValueService
 from fastapi import HTTPException
 from datetime import datetime
 
@@ -14,8 +14,10 @@ def test_get_values_file_not_found():
     ) = None
     mock_db.query.return_value = query
 
+    service = ValueService(db=mock_db)
+
     try:
-        get_values("missing.csv", db=mock_db)
+        service.get_values_by_filename("missing.csv")
         assert False, "Ожидалось исключение HTTPException"
     except HTTPException as e:
         assert e.status_code == 404
@@ -42,7 +44,9 @@ def test_get_values_success():
     ) = mock_file
     mock_db.query.return_value = query
 
-    result = get_values("example.csv", db=mock_db)
+    service = ValueService(db=mock_db)
+
+    result = service.get_values_by_filename("example.csv")
 
     assert result["file"].filename == "example.csv"
     assert result["values"][0].value == 5.5

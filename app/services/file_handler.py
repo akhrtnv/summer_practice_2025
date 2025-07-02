@@ -62,7 +62,14 @@ class FileHandler:
 
             for i, row in enumerate(reader, start=1):  # перебираем строки с их индексами
                 row_count += 1
-                start_time, duration, value = self.parse_row(row)
+                
+                parse_res = self.parse_row(row)
+                if parse_res == None:
+                    incorrect_rows.append(i)
+                    continue
+                
+                start_time, duration, value = parse_res 
+                
                 if not self.correct_row(start_time, duration, value):
                     incorrect_rows.append(i)
 
@@ -96,7 +103,7 @@ class FileHandler:
             reader = csv.reader(file, delimiter=";")
             next(reader)
 
-            for i, row in enumerate(reader):
+            for i, row in enumerate(reader, start=1):
                 if i in incorrect_rows:
                     continue
 
