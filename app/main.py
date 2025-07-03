@@ -11,8 +11,8 @@ import asyncio
 async def lifespan(app: FastAPI):
     # выполняется при старте
     init_db()
-    handler = FileHandler(database.session_factory)
-    asyncio.create_task(handler.run_handler(file_queue))
+    handler = FileHandler(database.session_factory, file_queue)
+    asyncio.create_task(handler.run_handler())
     
     yield
 

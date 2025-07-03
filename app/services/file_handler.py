@@ -12,13 +12,14 @@ class FileHandler:
     MIN_ROW_COUNT = 1
     MAX_ROW_COUNT = 10000
     
-    def __init__(self, db_session_factory):
+    def __init__(self, db_session_factory, file_queue: asyncio.Queue):
         self.db_session_factory = db_session_factory
+        self.file_queue = file_queue
 
     # обработкчик файлов: проверяет корректность, добавляет записи в таблицы
-    async def run_handler(self, file_queue: asyncio.Queue):
+    async def run_handler(self):
         while True:
-            filename, filepath, author = await file_queue.get()
+            filename, filepath, author = await self.file_queue.get()
 
             try:
                 await self.process_file(filename, filepath, author)
@@ -26,7 +27,7 @@ class FileHandler:
                 print(f"[handler] ошибка при добавлении записи: {e}")
             finally:
                 remove(filepath)  # удаляем временный файл после обработки
-                file_queue.task_done()
+                self.file_queue.task_done()
 
     async def process_file(self, filename: str, filepath: str, author: str):
         row_count, incorrect_rows = self.validate_rows(filepath)
