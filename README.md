@@ -6,7 +6,7 @@
 python -m venv venv
 ```
 
-2. Активировация `venv`. На Windows:
+2. Активация `venv`. На Windows:
 
 ```
 venv\Scripts\activate
