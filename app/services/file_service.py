@@ -3,6 +3,7 @@ from uuid import uuid4
 from .file_queue import get_queue
 import asyncio
 import aiofiles
+import os
 
 class FileService:
     def __init__(self, file_queue: asyncio.Queue):
@@ -12,7 +13,10 @@ class FileService:
         if not file.filename.lower().endswith(".csv"):
             raise HTTPException(400, detail="Ожидался файл с расширением .csv")
         
-        filepath = f"./tmp/{uuid4()}.csv"
+        tmp_dir = "./tmp"
+        os.makedirs(tmp_dir, exist_ok=True)
+
+        filepath = f"{tmp_dir}/{uuid4()}.csv"
     
         async with aiofiles.open(filepath, "wb") as out_file:  # открываем файл для записи
             while chunk := await file.read(1024):              # считываем из полученного файла фрагмент

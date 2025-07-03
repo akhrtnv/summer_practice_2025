@@ -2,14 +2,14 @@ from pydantic import BaseModel, ConfigDict
 from datetime import datetime
 from typing import List
 
-class File(BaseModel):
+class FileDTO(BaseModel):
     filename   : str
     author     : str
     created_at : datetime
 
     model_config = ConfigDict(from_attributes = True)
 
-class Result(BaseModel):
+class ResultDTO(BaseModel):
     first_start      : datetime
     last_start       : datetime
     min_duration     : int
@@ -24,8 +24,8 @@ class Result(BaseModel):
     model_config = ConfigDict(from_attributes = True)
     
 class ResultResponse(BaseModel):
-    file   : File
-    result : Result
+    file   : FileDTO
+    result : ResultDTO
 
 class Value(BaseModel):
     start_time : datetime
@@ -33,5 +33,5 @@ class Value(BaseModel):
     value      : float
 
 class ValuesResponse(BaseModel):
-    file   : File
+    file   : FileDTO
     values : List[Value]
