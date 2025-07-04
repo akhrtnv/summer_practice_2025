@@ -10,7 +10,7 @@ MIN_VALUE = FileHandler.MIN_VALUE
 MIN_ROW_COUNT = FileHandler.MIN_ROW_COUNT
 MAX_ROW_COUNT = FileHandler.MAX_ROW_COUNT
 
-fh = FileHandler(db_session_factory=None)
+fh = FileHandler(db_session_factory=None, file_queue=None)
 
 @pytest.mark.parametrize(
     "start_time, expected",

@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Session, joinedload
 from ..database.models import File
 from fastapi import HTTPException, Depends
-from ..database.dep import get_db
+from ..database.database import get_db
 
 class ValueService:
     def __init__(self, db: Session):

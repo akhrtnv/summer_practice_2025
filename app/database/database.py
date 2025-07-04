@@ -11,3 +11,11 @@ session_factory = sessionmaker(bind=engine, autocommit=False, autoflush=False)
 
 # базовый класс для всех моделей
 Base = declarative_base()
+
+# функция для внедрения FastAPI-зависимости
+def get_db():
+    db = session_factory()
+    try:
+        yield db
+    finally:
+        db.close()
